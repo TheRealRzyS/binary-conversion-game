@@ -6,15 +6,19 @@
 
 #define MAX_QUESTIONS 100 // Increase the number of questions
 #define TIME_LIMIT_SECONDS 120 // Set the time limit in seconds
-#define NUM_DIFFICULTY_LEVELS 4 // Number of difficulty levels
+#define NUM_DIFFICULTY_LEVELS 3 // Number of difficulty levels
 
-const int MAX_DIGITS[] = {2, 3, 4, 5}; // Array for maximum digits for each difficulty level
+const int MAX_DIGITS[] = {1, 2, 4}; // Array for maximum digits for each difficulty level
 
 // Function to generate a random number with up to the specified number of digits
 int generateRandomNumber(int maxDigits) {
     int max_value = pow(10, maxDigits) - 1; // Calculate the maximum value using pow() function
+    if (max_value > 1024) {
+        max_value = 1024; // Limit the maximum value to 1024
+    }
     return rand() % max_value; // Generate random numbers with up to the specified number of digits
 }
+
 
 // Function to convert a decimal number to binary
 int decimalToBinary(int decimal) {
@@ -75,7 +79,6 @@ int main() {
         printf("1. Easy\n");
         printf("2. Medium\n");
         printf("3. Hard\n");
-        printf("4. Expert\n");
         
         do {
             printf("Choose your difficulty (1-4): ");
