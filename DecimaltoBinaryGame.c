@@ -81,13 +81,13 @@ int main() {
         printf("3. Hard\n");
         
         do {
-            printf("Choose your difficulty (1-4): ");
+            printf("Choose your difficulty (1-3): ");
             int status = scanf("%d", &choice);
             while(getchar() != '\n'); // Clear the input buffer
             if (status != 1) {
                 printf("Invalid input. Please enter a number.\n");
             } else if (choice < 1 || choice > NUM_DIFFICULTY_LEVELS) {
-                printf("Invalid choice. Please enter a number between 1 and 4.\n");
+                printf("Invalid choice. Please enter a number between 1 and 3.\n");
             }
         } while (choice < 1 || choice > NUM_DIFFICULTY_LEVELS);
 
