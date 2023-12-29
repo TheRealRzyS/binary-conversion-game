@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <math.h>
 #include <string.h>
 
 #define MAX_QUESTIONS 100
@@ -18,15 +17,25 @@ int generateRandomNumber(int maxDigits) {
     return rand() % (max_value + 1);
 }
 
-// Converts a decimal number to binary
-int decimalToBinary(int decimal) {
-    int binary = 0, base = 1;
+// Converts a decimal number to a binary string
+void decimalToBinary(int decimal, char *binaryStr) {
+    char temp[BUFFER_SIZE];
+    int tempIndex = 0;
+
     while (decimal > 0) {
-        binary += (decimal % 2) * base;
-        decimal >>= 1;
-        base *= 10;
+        temp[tempIndex++] = (decimal % 2) + '0';
+        decimal /= 2;
     }
-    return binary;
+    temp[tempIndex] = '\0';
+
+    // Reverse the string as the binary representation is calculated in reverse
+    int leftIndex, rightIndex;
+    for (leftIndex = 0, rightIndex = tempIndex - 1; leftIndex < rightIndex; leftIndex++, rightIndex--) {
+        char ch = temp[leftIndex];
+        temp[leftIndex] = temp[rightIndex];
+        temp[rightIndex] = ch;
+    }
+    strcpy(binaryStr, temp);
 }
 
 // Validates if input is a binary number
@@ -47,24 +56,19 @@ void startGame(int maxDigits) {
 
     while ((time(NULL) - startTime) < TIME_LIMIT_SECONDS) {
         int decimal = generateRandomNumber(maxDigits);
-        int correctBinary = decimalToBinary(decimal);
+        char correctBinary[BUFFER_SIZE];
+        decimalToBinary(decimal, correctBinary);
         char userBinary[BUFFER_SIZE];
 
         printf("Convert %d to binary: ", decimal);
         fgets(userBinary, BUFFER_SIZE, stdin);
         userBinary[strcspn(userBinary, "\n")] = 0; // Remove newline character
 
-        if (!isBinary(userBinary)) {
-            printf("Invalid input. Please enter a binary number.\n");
-            continue;
-        }
-
-        int userBinaryInt = strtol(userBinary, NULL, 2);
-        if (userBinaryInt == correctBinary) {
+        if (strcmp(userBinary, correctBinary) == 0) {
             printf("Correct!\n");
             score++;
         } else {
-            printf("Incorrect. The correct answer is %d.\n", correctBinary);
+            printf("Incorrect. The correct answer is %s.\n", correctBinary);
         }
     }
 
@@ -101,4 +105,5 @@ int main() {
         } while (strcmp(quit, "yes") != 0 && strcmp(quit, "no") != 0);
     } while (strcmp(quit, "no") != 0);
 
-   
+    return 0;
+}
